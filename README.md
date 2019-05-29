@@ -29,24 +29,29 @@ NOTE: the use of an STL mesh viewer is recommended.
 
 
 on [an image on a circle](sample/images/circle.png?raw=false "circle.png"):
+
 ![displayed picture of circle](doc/figures/example_circle.png?raw=true)
 
 
 with adinkra_converter.py:
 
-`python adinkra_converter.py --base=True sample/images/circle.png sample/stl/circle_with_base.stl
-
+```
+python adinkra_converter.py --base=True sample/images/circle.png sample/stl/circle_with_base.stl
+```
 
 You should get an STL that looks like this (opened with Open 3D Model Viewer):
 ![circle mesh with base](doc/figures/circle_with_base.png?raw=true "circle mesh with base")
 
 
 on [an image of a triangle](sample/images/triangle.png?raw=false "triangle.png"):
+
 ![displayed picture of triangle](doc/figures/example_triangle.png?raw=true)
 
 with adinkra_converter.py:
 
-`python adinkra_converter.py --base=False sample/images/triangle.png sample/stl/triangle.stl
+```
+python adinkra_converter.py --base=False sample/images/triangle.png sample/stl/triangle.stl
+```
 
 You should get an STL that looks like this (opened with Open 3D Model Viewer):
 ![triangle mesh with no base](doc/figures/triangle_no_base.png "triangle mesh with no base")
