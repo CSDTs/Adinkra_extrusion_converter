@@ -28,6 +28,7 @@ A few examples on how to use the code found in the repository are shown below.\
 (NOTE: the use of an STL mesh viewer is recommended.)
 
 
+
 on [an image of a circle](sample/images/circle.png?raw=false "circle.png"):\
 ![displayed picture of circle](doc/figures/example_circle.png?raw=true)
 
@@ -50,6 +51,7 @@ image2stl.convert_to_stl(inverted_image, "sample/stl/circle_with_base.stl", base
 
 You should get an [circle mesh with base](sample/stl/circle_with_base.stl "STL") that looks like this (opened with Open 3D Model Viewer):\
 ![circle mesh with base](doc/figures/circle_with_base.png?raw=true "circle mesh with base")
+
 
 
 on [an image of a triangle](sample/images/triangle.png?raw=false "triangle.png"):\
@@ -95,6 +97,7 @@ This function reads in an image directory as a string and returns a numpy array 
 :return: (numpy.ndarray) an array of pixels representing the opened image
 ```
 
+
 **convert_to_standard_size(image_matrix, size=256)**
 ```
 Resize the images and change the aspect ratio to 1:1.
@@ -106,6 +109,7 @@ Resize the images and change the aspect ratio to 1:1.
 :return: (numpy.ndarray) A 2D array of pixels representing the resized image
 ```
 
+
 **grayscale(image_matrix)**
 ```
 Converts colored images to grayscale
@@ -115,6 +119,7 @@ Only works for RGB or RGBA images
 
 :return: (numpy.ndarray) A 2D array of pixels representing a grayscaled image
 ```
+
 
 **smooth_image(image_matrix, standard_deviation = 1)**
 ```
@@ -127,6 +132,7 @@ Smooths out images using the Gaussian function
 :return: (numpy.ndarray) A 2D array of pixels representing a smoothed image
 ```
 
+
 **convert_transparent_to_white(image_matrix)**
 ```
 Converts all transparent pixels into white pixels
@@ -136,6 +142,7 @@ Only works on [r, g, b, a] pixels
 :return: (numpy.ndarray) a 2D of pixels representing the whitened image
 ```
 
+
 **grayscale_negative(image_matrix)**
 ```
 Converts the grayscaled image array into its respective negative
@@ -144,6 +151,7 @@ Converts the grayscaled image array into its respective negative
 
 :return: The resulting negative image
 ```
+
 
 **convert_to_stl(image_matrix, output_file_directory, base=False)**
 ```
