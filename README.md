@@ -85,7 +85,7 @@ thus, it's possible to do something like:
 import image2stl
 
 image = image2stl.read_image("sample/images/circle.png")
-image_white_background = image2stl.convert_transparent_to(image, [0, 0, 0]) # transparent to #FFFFFF
+image_white_background = image2stl.convert_transparent_to(image, [0, 0, 0]) # transparent to #000000
 grayscaled_image = image2stl.grayscale(image)
 image2stl.convert_to_stl(grayscaled_image, "sample/stl/cylinder.stl", base=False, output_scale=1.0)
 ```
