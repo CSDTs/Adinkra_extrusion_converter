@@ -6,11 +6,11 @@ Make sure that the image background is either white(#FFFFFF) or transparent.
 This can be used for any image, not just Adinkra symbols.
 
 # Requirement
-Python 2.7
-Numpy 1.16
-OpenCV-Python 4.1 (for reading and resizing images)
-Scipy 1.2 (for scipy.ndimage.gaussian_filter)
-stl_tools 0.3 (find at https://github.com/thearn/stl_tools)
+ - Python 2.7
+ - Numpy 1.16
+ - OpenCV-Python 4.1 (for reading and resizing images)
+ - Scipy 1.2 (for scipy.ndimage.gaussian_filter)
+ - stl_tools 0.3 (find at https://github.com/thearn/stl_tools)
 
 # Installation
 Adinkra_converter can be used as is.
@@ -24,8 +24,12 @@ python -m pip install stl_tools
 ```
 
 # adinkra_converter.py usage examples:
+A few examples of using adinkra_converter.py are shown below.
 NOTE: the use of an STL mesh viewer is recommended.
 
+on ![circle.png]():
+`python adinkra_converter.py --base=True sample/images/circle.png sample/stl/circle.stl
 
+You should get a 
 
-# image2stl.py usage examples:
+# image2stl.py references:
