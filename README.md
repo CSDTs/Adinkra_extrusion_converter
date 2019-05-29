@@ -28,26 +28,28 @@ A few examples of using adinkra_converter.py are shown below.
 NOTE: the use of an STL mesh viewer is recommended.
 
 
-on ![circle.png]():
+on ![picture of circle](sample/images/circle.png?raw=true "circle.png"):
 
 
 with adinkra_converter.py:
+
 `python adinkra_converter.py --base=True sample/images/circle.png sample/stl/circle_with_base.stl
 
 
 You should get an STL that looks like this (opened with Open 3D Model Viewer):
 
-![circle with base]()
+![circle mesh with base](doc/figures/circle_with_base.png?raw=true "circle mesh with base")
 
 
-on ![triangle.png]():
+on ![picture of triangle](sample/images/triangle.png?raw=true "triangle.png"):
 
 with adinkra_converter.py:
+
 `python adinkra_converter.py --base=False sample/images/triangle.png sample/stl/triangle.stl
 
 You should get an STL that looks like this (opened with Open 3D Model Viewer):
 
-![triangle with no base]()
+![triangle mesh with no base](doc/figures/triangle_no_base.png "triangle mesh with no base")
 
 
 # image2stl.py references:
