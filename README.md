@@ -25,8 +25,7 @@ python -m pip install stl_tools
 
 # adinkra_converter.py usage examples:
 A few examples of using adinkra_converter.py are shown below.
-
-NOTE: the use of an STL mesh viewer is recommended.
+(NOTE: the use of an STL mesh viewer is recommended.)
 
 
 on [an image on a circle](sample/images/circle.png?raw=false "circle.png"):
@@ -35,7 +34,6 @@ on [an image on a circle](sample/images/circle.png?raw=false "circle.png"):
 
 
 with adinkra_converter.py:
-
 `python adinkra_converter.py --base=True sample/images/circle.png sample/stl/circle_with_base.stl`
 
 You should get an STL that looks like this (opened with Open 3D Model Viewer):
@@ -48,7 +46,6 @@ on [an image of a triangle](sample/images/triangle.png?raw=false "triangle.png")
 
 
 with adinkra_converter.py:
-
 `python adinkra_converter.py --base=False sample/images/triangle.png sample/stl/triangle.stl`
 
 
