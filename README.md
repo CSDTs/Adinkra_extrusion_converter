@@ -116,7 +116,6 @@ Converts colored images to grayscale
 Only works for RGB or RGBA images
 
 :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
-
 :return: (numpy.ndarray) A 2D array of pixels representing a grayscaled image
 ```
 
@@ -133,12 +132,13 @@ Smooths out images using the Gaussian function
 ```
 
 
-**convert_transparent_to_white(image_matrix)**
+**convert_transparent_to(image_matrix, target_pixel)**
 ```
 Converts all transparent pixels into white pixels
 Only works on [r, g, b, a] pixels
 
 :required_parameter image_matrix: (numpy.ndarray) a 2D array of pixels of the image to whiten
+:optional_parameter target_pixel: (numpy.ndarray) a [r, g, b] pixel to replace transparent pixels with
 :return: (numpy.ndarray) a 2D of pixels representing the whitened image
 ```
 
@@ -148,18 +148,18 @@ Only works on [r, g, b, a] pixels
 Converts the grayscaled image array into its respective negative
 
 :required_parameter image_matrix: (numpy.ndarray) The desired grayscale image to create a negative of
-
 :return: The resulting negative image
 ```
 
 
-**convert_to_stl(image_matrix, output_file_directory, base=False)**
+**convert_to_stl(image_matrix, output_file_directory, base=False, output_scale=0.1)**
 ```
 Converts the image matrix into an STL file and save it at output_file_directory
 NOTE: This function currently only supports grayscale
 
 :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
 :required_parameter output_file_directory: (string) The filename of the resulting STL file
+:optional_parameter output_scale: decides the final scaling of the resulting STL mesh
 :optional_parameter base: (boolean) A boolean value specifying whether or not
     to include a base into the resulting STL file
 ```

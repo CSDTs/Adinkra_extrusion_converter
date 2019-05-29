@@ -90,7 +90,7 @@ def grayscale(image_matrix):
     return grayscaled_image
 
 
-def smooth_image(image_matrix, standard_deviation = 1):
+def smooth_image(image_matrix, standard_deviation = 1.0):
     """
     Smooths out images using the Gaussian function
 
@@ -106,7 +106,7 @@ def smooth_image(image_matrix, standard_deviation = 1):
     return smoothed_image
 
 
-def transparent_to_white(pixel):
+def transparent_to(pixel, pixel_replacement):
     """
     Checks if a pixel is transparent; replaces with a white pixel if so
 
@@ -116,20 +116,20 @@ def transparent_to_white(pixel):
 
     alpha_channel = 3
     transparent = 0
-    white_pixel = np.array([255, 255, 255])
 
     if pixel[alpha_channel] == transparent:
-        return white_pixel
+        return pixel_replacement
     else:
         return pixel[0:3]
 
 
-def convert_transparent_to_white(image_matrix):
+def convert_transparent_to(image_matrix, target_pixel):
     """
     Converts all transparent pixels into white pixels
     Only works on [r, g, b, a] pixels
 
     :required_parameter image_matrix: (numpy.ndarray) a 2D array of pixels of the image to whiten
+    :optional_parameter target_pixel: (numpy.ndarray) a [r, g, b] pixel to replace transparent pixels with
     :return: (numpy.ndarray) a 2D of pixels representing the whitened image
     """
 
@@ -140,7 +140,7 @@ def convert_transparent_to_white(image_matrix):
         column_index = 0
 
         for pixel in row:
-            whitened_image[row_index][column_index] = transparent_to_white(pixel)
+            whitened_image[row_index][column_index] = transparent_to(pixel, pixel_replacement=target_pixel)
             column_index += 1
 
         row_index += 1
@@ -174,18 +174,18 @@ def grayscale_negative(image_matrix):
     return negative
 
 
-def convert_to_stl(image_matrix, output_file_directory, base=False):
+def convert_to_stl(image_matrix, output_file_directory, base=False, output_scale=0.1):
     """
     Converts the image matrix into an STL file and save it at output_file_directory
     NOTE: This function currently only supports grayscale
 
     :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
     :required_parameter output_file_directory: (string) The filename of the resulting STL file
+    :optional_parameter output_scale: decides the final scaling of the resulting STL mesh
 	:optional_parameter base: (boolean) A boolean value specifying whether or not
 		to include a base into the resulting STL file
     """
 
-    output_scale = 0.1  # Change this to scale the resulting 3D file up or down
     make_it_solid = True  # Change this False to make it hollow; True to make the image solid
     exclude_gray_shade_darker_than = 1.0  # Change this to change what colors should be excluded
     # exclude_gray_shade_below = 1.0 should exclude only black pixels; but I'm not sure

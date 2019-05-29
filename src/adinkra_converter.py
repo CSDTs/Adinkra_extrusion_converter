@@ -27,7 +27,8 @@ def adinkra_interface(input_image_directory, output_stl_directory, include_base=
     image_matrix = image2stl.read_image(input_image_directory)
 
     # needed for color correction; in case cv2 opens the image improperly
-    whitened_image_matrix = image2stl.convert_transparent_to_white(image_matrix)
+    white_pixel = [255, 255, 255]
+    whitened_image_matrix = image2stl.convert_transparent_to(image_matrix, white_pixel)
 
     print("resizing to square the images...")
     resized_image = image2stl.convert_to_standard_size(whitened_image_matrix)
@@ -51,7 +52,9 @@ def adinkra_interface(input_image_directory, output_stl_directory, include_base=
         print("Adding a base: Disabled")
 
     print("Generating the corresponding STL file")
-    image2stl.convert_to_stl(inverted_image, output_stl_directory, include_base)
+
+    stl_scale = 0.1
+    image2stl.convert_to_stl(inverted_image, output_stl_directory, include_base, output_scale=stl_scale)
 
     print("STL file generated and saved at " + output_stl_directory)
 
