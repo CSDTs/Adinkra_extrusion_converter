@@ -41,12 +41,12 @@ with image2stl.py:
 import image2stl
 
 image = image2stl.read_image("sample/images/circle.png")
-image_white_background = image2stl.convert_transparent_to_white(image)
+image_white_background = image2stl.convert_transparent_to(image, [255, 255, 255]) # transparent to #FFFFFF
 resized_image = image2stl.convert_to_standard_size(image_white_background, size=256)
 grayscaled_image = image2stl.grayscale(resized_image)
 smoothed_image = image2stl.smooth_image(grayscaled_image, standard_deviation=1)
 inverted_image = image2stl.grayscale_negative(smoothed_image)
-image2stl.convert_to_stl(inverted_image, "sample/stl/circle_with_base.stl", base=True)
+image2stl.convert_to_stl(inverted_image, "sample/stl/circle_with_base.stl", base=True, output_scale=0.1)
 ```
 
 You should get an [circle mesh with base](sample/stl/circle_with_base.stl "STL") that looks like this (opened with Open 3D Model Viewer):\
@@ -67,16 +67,32 @@ with image2stl.py:
 import image2stl
 
 image = image2stl.read_image("sample/images/triangle.png")
-image_white_background = image2stl.convert_transparent_to_white(image)
+image_white_background = image2stl.convert_transparent_to(image, [255, 255, 255]) # transparent to #FFFFFF
 resized_image = image2stl.convert_to_standard_size(image_white_background, size=256)
 grayscaled_image = image2stl.grayscale(resized_image)
 smoothed_image = image2stl.smooth_image(grayscaled_image, standard_deviation=1)
 inverted_image = image2stl.grayscale_negative(smoothed_image)
-image2stl.convert_to_stl(inverted_image, "sample/stl/triangle.stl", base=False)
+image2stl.convert_to_stl(inverted_image, "sample/stl/triangle.stl", base=False, output_scale=0.1)
 ```
 
 You should get an [triangle mesh](sample/stl/triangle.stl "STL") that looks like this (opened with Open 3D Model Viewer):\
 ![triangle mesh with no base](doc/figures/triangle_no_base.png "triangle mesh with no base")
+
+
+**convert_to_stl** technically filters out black pixels, but the adinkra_converter gives a negative of the input image\
+thus, it's possible to do something like:
+```Python
+import image2stl
+
+image = image2stl.read_image("sample/images/circle.png")
+image_white_background = image2stl.convert_transparent_to(image, [0, 0, 0]) # transparent to #FFFFFF
+grayscaled_image = image2stl.grayscale(image)
+image2stl.convert_to_stl(grayscaled_image, "sample/stl/cylinder.stl", base=False, output_scale=1.0)
+```
+
+This will yield a cylinder mesh like so:\
+![cylinder STL mesh](doc/figures/cylinder.png "cylinder mesh with no base")
+
 
 # image2stl Function References
 
@@ -159,7 +175,7 @@ NOTE: This function currently only supports grayscale
 
 :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
 :required_parameter output_file_directory: (string) The filename of the resulting STL file
-:optional_parameter output_scale: decides the final scaling of the resulting STL mesh
+:optional_parameter output_scale: decides the height scaling of the resulting STL mesh
 :optional_parameter base: (boolean) A boolean value specifying whether or not
     to include a base into the resulting STL file
 ```

@@ -123,7 +123,8 @@ def transparent_to(pixel, pixel_replacement):
         return pixel[0:3]
 
 
-def convert_transparent_to(image_matrix, target_pixel):
+
+def convert_transparent_to(image_matrix, target_pixel=[255,255,255]):
     """
     Converts all transparent pixels into white pixels
     Only works on [r, g, b, a] pixels
@@ -181,7 +182,7 @@ def convert_to_stl(image_matrix, output_file_directory, base=False, output_scale
 
     :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
     :required_parameter output_file_directory: (string) The filename of the resulting STL file
-    :optional_parameter output_scale: decides the final scaling of the resulting STL mesh
+    :optional_parameter output_scale: decides the height scaling of the resulting STL mesh
 	:optional_parameter base: (boolean) A boolean value specifying whether or not
 		to include a base into the resulting STL file
     """
