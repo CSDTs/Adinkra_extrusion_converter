@@ -28,7 +28,9 @@ A few examples of using adinkra_converter.py are shown below.
 NOTE: the use of an STL mesh viewer is recommended.
 
 
-on ![picture of circle](sample/images/circle.png?raw=true "circle.png"):
+on ![an image on a circle](sample/images/circle.png "circle.png"):
+
+![displayed picture of circle](sample/images/circle.png?raw=true width="128" height="128" "circle.png"):
 
 
 with adinkra_converter.py:
@@ -41,7 +43,9 @@ You should get an STL that looks like this (opened with Open 3D Model Viewer):
 ![circle mesh with base](doc/figures/circle_with_base.png?raw=true "circle mesh with base")
 
 
-on ![picture of triangle](sample/images/triangle.png?raw=true "triangle.png"):
+on ![an image of a triangle](sample/images/triangle.png "triangle.png"):
+
+![displayed picture of triangle](sample/images/triangle.png?raw=true width="128" height="128" "triangle.png"):
 
 with adinkra_converter.py:
 
