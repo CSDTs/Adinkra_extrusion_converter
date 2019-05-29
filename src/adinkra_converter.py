@@ -1,6 +1,6 @@
 import image2stl
 
-try:  #
+try:
     import argparse
     import sys
 except ImportError as e:
@@ -86,7 +86,7 @@ def cli_interface():
 
     Usage: python2 image2stl.py [-b/--base True/False] image_directory stl_directory
 
-    example:    python2 image2stl.py --base=True images/triangle.png stl/triangle.stl
+    example:    python2 image2stl.py --base=True images/triangle.png stl/triangle_with_base.stl
                 python2 image2stl.py -b False images/circle.png stl/circle.stl
     """
 
@@ -119,9 +119,16 @@ def main():
     """
     adinkra_converter.py
 
-
-
+    This script converts Adinkra symbols in the form of jpg/png format and converts it to a 
+    3D raised projection in STL format.
+    
+    Example usage: python2 adinkra_converter.py --base=True ./sample/images/circle.png ./sample/stl/circle_with_base.stl
+    
+    There is also a fallback interface that allows the user to manually enter in parameter values.
+    It's not activated normally but can be enabled by uncommenting 'fallback_interface=False' above
+    To use this, simply invoke: python2 adinkra_converter.py
     """
+
     if fallback_interface == True:
         prompt_based_interface()
     else:
