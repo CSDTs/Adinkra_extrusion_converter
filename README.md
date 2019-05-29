@@ -41,12 +41,12 @@ with image2stl.py:
 import image2stl
 
 image = image2stl.read_image("sample/images/circle.png")
-image_white_background = image2stl.convert_transparent_to_white(image)
+image_white_background = image2stl.convert_transparent_to(image, [255, 255, 255]) # transparent to #FFFFFF
 resized_image = image2stl.convert_to_standard_size(image_white_background, size=256)
 grayscaled_image = image2stl.grayscale(resized_image)
 smoothed_image = image2stl.smooth_image(grayscaled_image, standard_deviation=1)
 inverted_image = image2stl.grayscale_negative(smoothed_image)
-image2stl.convert_to_stl(inverted_image, "sample/stl/circle_with_base.stl", base=True)
+image2stl.convert_to_stl(inverted_image, "sample/stl/circle_with_base.stl", base=True, output_scale=0.1)
 ```
 
 You should get an [circle mesh with base](sample/stl/circle_with_base.stl "STL") that looks like this (opened with Open 3D Model Viewer):\
@@ -67,16 +67,32 @@ with image2stl.py:
 import image2stl
 
 image = image2stl.read_image("sample/images/triangle.png")
-image_white_background = image2stl.convert_transparent_to_white(image)
+image_white_background = image2stl.convert_transparent_to(image, [255, 255, 255]) # transparent to #FFFFFF
 resized_image = image2stl.convert_to_standard_size(image_white_background, size=256)
 grayscaled_image = image2stl.grayscale(resized_image)
 smoothed_image = image2stl.smooth_image(grayscaled_image, standard_deviation=1)
 inverted_image = image2stl.grayscale_negative(smoothed_image)
-image2stl.convert_to_stl(inverted_image, "sample/stl/triangle.stl", base=False)
+image2stl.convert_to_stl(inverted_image, "sample/stl/triangle.stl", base=False, output_scale=0.1)
 ```
 
 You should get an [triangle mesh](sample/stl/triangle.stl "STL") that looks like this (opened with Open 3D Model Viewer):\
 ![triangle mesh with no base](doc/figures/triangle_no_base.png "triangle mesh with no base")
+
+
+**convert_to_stl** technically filters out black pixels, but the adinkra_converter gives a negative of the input image\
+thus, it's possible to do something like:
+```Python
+import image2stl
+
+image = image2stl.read_image("sample/images/circle.png")
+image_white_background = image2stl.convert_transparent_to(image, [0, 0, 0]) # transparent to #FFFFFF
+grayscaled_image = image2stl.grayscale(image)
+image2stl.convert_to_stl(grayscaled_image, "sample/stl/cylinder.stl", base=False, output_scale=1.0)
+```
+
+This will yield a cylinder mesh like so:\
+![cylinder STL mesh](doc/figures/cylinder.png "cylinder mesh with no base")
+
 
 # image2stl Function References
 
@@ -116,7 +132,6 @@ Converts colored images to grayscale
 Only works for RGB or RGBA images
 
 :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
-
 :return: (numpy.ndarray) A 2D array of pixels representing a grayscaled image
 ```
 
@@ -133,12 +148,13 @@ Smooths out images using the Gaussian function
 ```
 
 
-**convert_transparent_to_white(image_matrix)**
+**convert_transparent_to(image_matrix, target_pixel)**
 ```
 Converts all transparent pixels into white pixels
 Only works on [r, g, b, a] pixels
 
 :required_parameter image_matrix: (numpy.ndarray) a 2D array of pixels of the image to whiten
+:optional_parameter target_pixel: (numpy.ndarray) a [r, g, b] pixel to replace transparent pixels with
 :return: (numpy.ndarray) a 2D of pixels representing the whitened image
 ```
 
@@ -148,18 +164,18 @@ Only works on [r, g, b, a] pixels
 Converts the grayscaled image array into its respective negative
 
 :required_parameter image_matrix: (numpy.ndarray) The desired grayscale image to create a negative of
-
 :return: The resulting negative image
 ```
 
 
-**convert_to_stl(image_matrix, output_file_directory, base=False)**
+**convert_to_stl(image_matrix, output_file_directory, base=False, output_scale=0.1)**
 ```
 Converts the image matrix into an STL file and save it at output_file_directory
 NOTE: This function currently only supports grayscale
 
 :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
 :required_parameter output_file_directory: (string) The filename of the resulting STL file
+:optional_parameter output_scale: decides the height scaling of the resulting STL mesh
 :optional_parameter base: (boolean) A boolean value specifying whether or not
     to include a base into the resulting STL file
 ```
