@@ -77,3 +77,81 @@ You should get an [triangle mesh](sample/stl/triangle.stl "STL") that looks like
 ![triangle mesh with no base](doc/figures/triangle_no_base.png "triangle mesh with no base")
 
 # image2stl Function References
+
+**read_image(image_directory, read_mode)**
+```
+This function reads in an image directory as a string and returns a numpy array of pixels in the image
+
+:required_parameter image_directory: (String) The path in which the image resides
+    The path can be a relative path to this script or an absolute path
+
+:optional_parameter read_mode: (constants from cv2) This constants controls
+    how to represent the pixels in the image. The constants include but is not limited to:
+        cv2.IMREAD_COLOR - represent pixels as an array designating [red, green, blue] channels
+        cv2.IMREAD_GRAYSCALE - represent pixels as intensity information
+            0.0 being completely black and 1.0 being completely white
+        cv2.IMREAD_UNCHANGED - represent pixels as an array designating [red, green, blue, alpha] channels
+
+:return: (numpy.ndarray) an array of pixels representing the opened image
+```
+
+**convert_to_standard_size(image_matrix, size=256)**
+```
+Resize the images and change the aspect ratio to 1:1.
+
+:required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels of the image to resize
+:optional_parameter size: (int) The desired size of the output image
+    The default parameter specifies an output image of 256 x 256
+
+:return: (numpy.ndarray) A 2D array of pixels representing the resized image
+```
+
+**grayscale(image_matrix)**
+```
+Converts colored images to grayscale
+Only works for RGB or RGBA images
+
+:required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
+
+:return: (numpy.ndarray) A 2D array of pixels representing a grayscaled image
+```
+
+**smooth_image(image_matrix, standard_deviation = 1)**
+```
+Smooths out images using the Gaussian function
+
+:required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
+:optional_parameter standard_deviation: The standard deviation of the Gaussian function
+    The default standard deviation is 1
+
+:return: (numpy.ndarray) A 2D array of pixels representing a smoothed image
+```
+
+**convert_transparent_to_white(image_matrix)**
+```
+Converts all transparent pixels into white pixels
+Only works on [r, g, b, a] pixels
+
+:required_parameter image_matrix: (numpy.ndarray) a 2D array of pixels of the image to whiten
+:return: (numpy.ndarray) a 2D of pixels representing the whitened image
+```
+
+**grayscale_negative(image_matrix)**
+```
+Converts the grayscaled image array into its respective negative
+
+:required_parameter image_matrix: (numpy.ndarray) The desired grayscale image to create a negative of
+
+:return: The resulting negative image
+```
+
+**convert_to_stl(image_matrix, output_file_directory, base=False)**
+```
+Converts the image matrix into an STL file and save it at output_file_directory
+NOTE: This function currently only supports grayscale
+
+:required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
+:required_parameter output_file_directory: (string) The filename of the resulting STL file
+:optional_parameter base: (boolean) A boolean value specifying whether or not
+    to include a base into the resulting STL file
+```
