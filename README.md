@@ -1,7 +1,7 @@
 # Adinkra_extrusion_converter version 1.0
 This project contains routines to convert an Adinkra symbol in jpeg/png format and converts it to an STL file for 3D printing.
 
-Make sure that the image background is either white(#FFFFFF) or transparent.
+Make sure that the image background is either white (#FFFFFF) or transparent.
 
 This can be used for any image, not just Adinkra symbols.
 
@@ -28,7 +28,7 @@ A few examamples on how to use the code found in the repository are shown below.
 (NOTE: the use of an STL mesh viewer is recommended.)
 
 
-on [an image on a circle](sample/images/circle.png?raw=false "circle.png"):\
+on [an image of a circle](sample/images/circle.png?raw=false "circle.png"):\
 ![displayed picture of circle](doc/figures/example_circle.png?raw=true)
 
 
@@ -36,7 +36,7 @@ with adinkra_converter.py via the command line:\
 `python adinkra_converter.py --base=True sample/images/circle.png sample/stl/circle_with_base.stl`
 
 with image2stl.py:
-```
+```Python
 import image2stl
 
 image = image2stl.read_image("sample/images/circle.png)
@@ -61,7 +61,7 @@ with adinkra_converter.py via the command line:\
 
 
 with image2stl.py:
-```
+```Python
 import image2stl
 
 image = image2stl.read_image("sample/images/triangle.png)
