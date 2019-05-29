@@ -123,7 +123,7 @@ def transparent_to(pixel, pixel_replacement):
         return pixel[0:3]
 
 
-def convert_transparent_to(image_matrix, target_pixel):
+def convert_transparent_to(image_matrix, target_pixel=[255,255,255]):
     """
     Converts all transparent pixels into white pixels
     Only works on [r, g, b, a] pixels
