@@ -24,7 +24,7 @@ python -m pip install stl_tools
 ```
 
 # adinkra_converter.py usage examples:
-A few examples of using adinkra_converter.py are shown below.
+A few examples of using adinkra_converter.py are shown below.\
 (NOTE: the use of an STL mesh viewer is recommended.)
 
 
