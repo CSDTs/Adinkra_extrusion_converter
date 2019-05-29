@@ -1,4 +1,4 @@
-# Adinkra_extrusion_converter version 1.0
+# Adinkra Extrusion Converter version 1.0
 This project contains routines to convert an Adinkra symbol in jpeg/png format and converts it to an STL file for 3D printing.
 
 Make sure that the image background is either white (#FFFFFF) or transparent.
@@ -24,7 +24,7 @@ python -m pip install stl_tools
 ```
 
 # Usage Examples:
-A few examamples on how to use the code found in the repository are shown below.\
+A few examples on how to use the code found in the repository are shown below.\
 (NOTE: the use of an STL mesh viewer is recommended.)
 
 
@@ -39,7 +39,7 @@ with image2stl.py:
 ```Python
 import image2stl
 
-image = image2stl.read_image("sample/images/circle.png)
+image = image2stl.read_image("sample/images/circle.png")
 image_white_background = image2stl.convert_transparent_to_white(image)
 resized_image = image2stl.convert_to_standard_size(image_white_background, size=256)
 grayscaled_image = image2stl.grayscale(resized_image)
@@ -64,7 +64,7 @@ with image2stl.py:
 ```Python
 import image2stl
 
-image = image2stl.read_image("sample/images/triangle.png)
+image = image2stl.read_image("sample/images/triangle.png")
 image_white_background = image2stl.convert_transparent_to_white(image)
 resized_image = image2stl.convert_to_standard_size(image_white_background, size=256)
 grayscaled_image = image2stl.grayscale(resized_image)
@@ -75,3 +75,5 @@ image2stl.convert_to_stl(inverted_image, "sample/stl/triangle.stl", base=False)
 
 You should get an [triangle mesh](sample/stl/triangle.stl "STL") that looks like this (opened with Open 3D Model Viewer):\
 ![triangle mesh with no base](doc/figures/triangle_no_base.png "triangle mesh with no base")
+
+# image2stl Function References
