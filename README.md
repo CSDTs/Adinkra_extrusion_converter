@@ -94,7 +94,7 @@ You should get an [triangle mesh](sample/stl/triangle.stl "STL") that looks like
 
 
 **convert_to_stl** technically filters out black pixels, but the adinkra_converter gives a negative of the input image\
-thus, it's possible to do something like:
+thus, it's possible to do something like (using the same circle image above):
 ```Python
 import image2stl
 
