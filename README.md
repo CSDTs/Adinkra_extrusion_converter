@@ -24,7 +24,21 @@ python -m pip install stl_tools
 ```
 
 # Usage Examples:
-A few examples on how to use the code found in the repository are shown below.\
+image2stl.py contains the routines needed to convert images to STL, while adinkra_converter.py contains the interface that users interact with.
+adinkra_converter.py receives parameter options via the command line.
+
+Here is the template for invoking adinkra_converter.py:\
+`python adinkra_converter.py [-b/--base True/False] image_directory stl_directory`
+
+`-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).
+
+image_directory is the directory where the image to convert to STL resides.
+
+stl_directory is the directory in which to save the resulting STL file.
+
+
+
+A few examples on how to use image2stl.py/adinkra_converter.py are shown below.\
 (NOTE: the use of an STL mesh viewer is recommended.)
 
 
