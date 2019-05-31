@@ -26,6 +26,7 @@ def adinkra_interface(input_image_directory, output_stl_directory, include_base=
     :optional_parameter include_base: (boolean) decides whether or not to add a base to the STL shape
     :optional_parameter smooth: (boolean) decides whether or not the smooth the image to reduce texture
     :optional_parameter size: (int) decides the length and height of the resulting STL file
+    :optional_parameter scale: (float) decides the height scaling of the resulting STL mesh
     """
 
     print("opening image at " + input_image_directory + "...")
@@ -71,7 +72,7 @@ def prompt_based_interface():
     """
     An interface that asks for user input to get the necessary parameters
 
-    Usage: python2 image2stl.py
+    Usage: python2 adinkra_converter.py
         The interface will then ask you for the parameters
     """
 
@@ -111,10 +112,12 @@ def cli_interface():
     """
     An interface that utilizes command line parameters to get the necessary parameters
 
-    Usage: python2 image2stl.py [-b/--base True/False] image_directory stl_directory
+    Usage: python2 adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False]
+        [-s/--size dimension] [x/--scale scale] image_directory stl_directory
 
-    example:    python2 image2stl.py --base=True images/triangle.png stl/triangle_with_base.stl
-                python2 image2stl.py -b False images/circle.png stl/circle.stl
+    example:    python2 adinkra_converter.py images/triangle.png stl/triangle_with_base.stl
+                python2 adinkra_converter.py --base=True --smooth=False --size=512 --scale=1.0 images/triangle.png
+                    stl/circle.stl
     """
 
     parser = argparse.ArgumentParser(description="Converts adinkra images into STL files for 3D printing.")
@@ -197,11 +200,13 @@ def main():
     This script converts Adinkra symbols in the form of jpg/png format and converts it to a 
     3D raised projection in STL format.
     
-    Example usage: python2 adinkra_converter.py --base=True ./sample/images/circle.png ./sample/stl/circle_with_base.stl
+    Example usage: python2 adinkra_converter.py --base=True --smooth=True --size=1024 --scale=1.0
+                        ./sample/images/circle.png ./sample/stl/circle_with_base.stl
     
     There is also a fallback interface that allows the user to manually enter in parameter values.
     It's activated with no parameter options
-    and can be enabled by uncommenting 'fallback_interface=False' above
+    and can be enabled by uncommenting 'fallback_interface=True' above
+
     To use this, simply invoke: python2 adinkra_converter.py
     """
 
