@@ -182,8 +182,8 @@ def convert_to_stl(image_matrix, output_file_directory, base=False, output_scale
     :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels representing an image
     :required_parameter output_file_directory: (string) The filename of the resulting STL file
     :optional_parameter output_scale: decides the height scaling of the resulting STL mesh
-	:optional_parameter base: (boolean) A boolean value specifying whether or not
-		to include a base into the resulting STL file
+    :optional_parameter base: (boolean) A boolean value specifying whether or not
+        to include a base into the resulting STL file
     """
 
     make_it_solid = True  # Change this False to make it hollow; True to make the image solid
@@ -195,13 +195,13 @@ def convert_to_stl(image_matrix, output_file_directory, base=False, output_scale
     python_only = False
 
     if base:
-	    numpy2stl(image_matrix, output_file_directory,
-		        scale=output_scale,
-				solid=make_it_solid,
-				force_python=python_only)
+        numpy2stl(image_matrix, output_file_directory,
+                scale=output_scale,
+                solid=make_it_solid,
+                force_python=python_only)
     else:
-		numpy2stl(image_matrix, output_file_directory,
-				scale=output_scale,
-				solid=make_it_solid,
-				mask_val=exclude_gray_shade_darker_than,
-				force_python=python_only)
+        numpy2stl(image_matrix, output_file_directory,
+                scale=output_scale,
+                solid=make_it_solid,
+                mask_val=exclude_gray_shade_darker_than,
+                force_python=python_only)
