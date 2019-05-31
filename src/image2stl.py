@@ -123,14 +123,14 @@ def transparent_to(pixel, pixel_replacement):
         return pixel[0:3]
 
 
-
-def convert_transparent_to(image_matrix, target_pixel=[255,255,255]):
+def convert_transparent_to(image_matrix, target_pixel=[255,255,255]): # white pixel by default
     """
     Converts all transparent pixels into white pixels
     Only works on [r, g, b, a] pixels
 
     :required_parameter image_matrix: (numpy.ndarray) a 2D array of pixels of the image to whiten
     :optional_parameter target_pixel: (numpy.ndarray) a [r, g, b] pixel to replace transparent pixels with
+        the default is a white pixel (#FFFFFF)
     :return: (numpy.ndarray) a 2D of pixels representing the whitened image
     """
 
@@ -154,7 +154,6 @@ def gray_inverse(pixel):
     Inverts the color of the given pixel
 
     :required_parameter pixel:  A pixel from a grayscaled image
-
     :return: the inverted color of the pixel in the resulting negative image
     """
 
@@ -166,7 +165,6 @@ def grayscale_negative(image_matrix):
     Converts the grayscaled image array into its respective negative
 
     :required_parameter image_matrix: (numpy.ndarray) The desired grayscale image to create a negative of
-
     :return: The resulting negative image
     """
 
