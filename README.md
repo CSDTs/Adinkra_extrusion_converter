@@ -30,9 +30,9 @@ adinkra_converter.py receives parameter options via the command line.
 Here is the template for invoking adinkra_converter.py:\
 `python adinkra_converter.py [-b/--base True/False] [g/--smooth True/False] [-s/--size size] [-x/-scale scaling] image_directory stl_directory`
 
-`-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).
-`-g True` or `--smooth=True` specifies that the image is smoothed before converting to STL; False would disable this feature (default option).
-`-s 256` or `--size=256` specifies that the image be resized to (256x256) (default option).
+`-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).\
+`-g True` or `--smooth=True` specifies that the image is smoothed before converting to STL; False would disable this feature (default option).\
+`-s 256` or `--size=256` specifies that the image be resized to (256x256) (default option).\
 `-x 0.1` or `--scale=0.1` scales the resulting STL mesh height to 1/10 (default option).
 
 `image_directory` is the directory where the image to convert to STL resides.
