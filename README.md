@@ -1,12 +1,16 @@
-# Adinkra Extrusion Converter version 1.0
+# Adinkra Extrusion Converter version 1.1
 This project contains routines to convert an Adinkra symbol in jpeg/png format and converts it to an STL file for 3D printing.
 
 Make sure that the image background is either white (#FFFFFF) or transparent.
 
 This can be used for any image, not just Adinkra symbols.
 
+# Release Note
+    - version 1.0/2.7: Project is first pushed to production
+    - version 1.1/2.7: Added an option to generate a negative mold as well as fixing issues with [r, g, b] channels
+
 # Requirement
- - Python 2.7
+ - Python 2.7.16
  - Numpy 1.16
  - OpenCV-Python 4.1 (for reading and resizing images)
  - Scipy 1.2 (for scipy.ndimage.gaussian_filter)
@@ -28,10 +32,11 @@ image2stl.py contains the routines needed to convert images to STL, while adinkr
 adinkra_converter.py receives parameter options via the command line.
 
 Here is the template for invoking adinkra_converter.py:\
-`python adinkra_converter.py [-b/--base True/False] [g/--smooth True/False] [-s/--size size] [-x/-scale scaling] image_directory stl_directory`
+`python adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False][-s/--size size] [-x/-scale scaling] image_directory stl_directory`
 
 `-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).\
 `-g True` or `--smooth=True` specifies that the image is smoothed before converting to STL; False would disable this feature (default option).\
+`-c True` r `--negative=True` specifies that the image is used to generate a square with the image object as a  (default option is False). \
 `-s 256` or `--size=256` specifies that the image be resized to (256x256) (default option).\
 `-x 0.1` or `--scale=0.1` scales the resulting STL mesh height to 1/10 (default option).
 
