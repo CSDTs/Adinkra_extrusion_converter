@@ -1,6 +1,6 @@
 import image2stl
 
-try:
+try: # can your computer parse command line argument?
     import argparse
     import sys
 except ImportError as e:
@@ -13,7 +13,13 @@ else:
 # uncomment this if you want to use the prompt based interface
 # fallback_interface = True
 
-def adinkra_interface(input_image_directory, output_stl_directory, include_base=False, smooth=True, size=256,
+def convert_adinkra(input_image_directory,
+                      output_stl_directory,
+
+                      include_base=False,
+                      smooth=True,
+                      negative=False,
+                      size=256,
                       scale=0.1):
     """
     Opens an adinkra image at input_image_directory, does image manipulation to prepare it for STL conversion,
@@ -24,17 +30,26 @@ def adinkra_interface(input_image_directory, output_stl_directory, include_base=
     :required_parameter input_image_directory: (string) the directory of the image to convert to STL
     :required_parameter output_stl_directory: (string) the directory to save the resulting STL file to
     :optional_parameter include_base: (boolean) decides whether or not to add a base to the STL shape
+                                        default value is False
+    :optional_parameter negative: (boolean) if this is true, a square is created with a cavity of the image object
+                                        default value is False
     :optional_parameter smooth: (boolean) decides whether or not the smooth the image to reduce texture
+                                        default value is True
     :optional_parameter size: (int) decides the length and height of the resulting STL file
+                                        default size is 256 x 256
     :optional_parameter scale: (float) decides the height scaling of the resulting STL mesh
+                                        default scaling is 0.1
     """
 
     print("opening image at " + input_image_directory + "...")
     image_matrix = image2stl.read_image(input_image_directory)
 
     # needed for color correction; in case cv2 opens the image improperly
-    white_pixel = [255, 255, 255]
-    whitened_image_matrix = image2stl.convert_transparent_to(image_matrix, white_pixel)
+    if image_matrix.shape == 4: # image exists as [r, g, b, a] channels
+        white_pixel = [255, 255, 255]
+        whitened_image_matrix = image2stl.convert_transparent_to(image_matrix, white_pixel)
+    else: # for whatever reason, image is only opened as [r, g, b] channels; no color corrections possible
+        whitened_image_matrix = image_matrix
 
     print("resizing to square the images to (" + str(size) + "x" + str(size) + ")...")
     resized_image = image2stl.convert_to_standard_size(whitened_image_matrix, size)
@@ -51,10 +66,17 @@ def adinkra_interface(input_image_directory, output_stl_directory, include_base=
         print("smoothing: Disabled")
         smoothed_image = grayscaled_image
 
-    print("Generating the image negative (assumes the wanted areas are not white)...")
-    inverted_image = image2stl.grayscale_negative(smoothed_image)
-
-    # current configuration is to display everything except for white/transparent pixels in print
+    if negative == True:
+        print("Image negative: True")
+        print("Keeping the image negaitve (assumes that the areas to print are white)...")
+        inverted_image = smoothed_image
+        # current configuration is to exclude everything that's not white (greater than or equal to 1.0 grayscale)
+    else:
+        print("Generating the image negative (assumes the wanted areas are not white)...")
+        print("Image negative: False")
+        inverted_image = image2stl.grayscale_negative(smoothed_image)
+        # current configuration is to display everything except for white/transparent (less than 1.0 in grayscale)
+        # pixels in print
 
     if include_base == True:
         print("Adding a base: Enabled")
@@ -80,6 +102,7 @@ def prompt_based_interface():
     output_stl_directory = raw_input("Enter the directory to save the resulting STL file at here >")
     user_wants_base = raw_input("Include base [Y/N] >")
     user_wants_smooth = raw_input("Smooth the image [Y/N] >")
+    user_wants_negative = raw_input("Generate a negative instead [Y/N] >")
     user_specified_size = raw_input("size of the resulting STL file >")
     user_specified_scale = raw_input("height scaling of the resulting STL file >")
 
@@ -93,9 +116,14 @@ def prompt_based_interface():
     else:
         include_smooth = False
 
+    if user_wants_negative.lower() == "y" or user_wants_negative == "yes":
+        generate_negative = True
+    else:
+        generate_negative = False
+
     if user_specified_size == "":
         output_size = 256
-        print("defaulting to 256 x 256")
+        print("defaulting to size = 256 x 256")
     else:
         try:
             output_size = int(user_specified_size)
@@ -105,27 +133,35 @@ def prompt_based_interface():
             print("defaulting to 256 x 256")
             output_size = 256
 
-    adinkra_interface(input_image_directory, output_stl_directory, include_base, include_smooth, output_size)
+    if user_specified_scale == "":
+        output_scale = 0.1
+        print("defaulting to scale = 0.1")
+    else:
+        output_scale = float(user_specified_scale)
+
+    convert_adinkra(input_image_directory, output_stl_directory, include_base, include_smooth, generate_negative,
+                    output_size, output_scale)
 
 
 def cli_interface():
     """
     An interface that utilizes command line parameters to get the necessary parameters
 
-    Usage: python2 adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False]
+    Usage: python2 adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False]
         [-s/--size dimension] [x/--scale scale] image_directory stl_directory
 
     example:    python2 adinkra_converter.py images/triangle.png stl/triangle_with_base.stl
-                python2 adinkra_converter.py --base=True --smooth=False --size=512 --scale=1.0 images/triangle.png
-                    stl/circle.stl
+                python2 adinkra_converter.py --base=True --smooth=False --negative=Falsse
+                --size=512 --scale=1.0 images/triangle.png stl/circle.stl
     """
 
     parser = argparse.ArgumentParser(description="Converts adinkra images into STL files for 3D printing.")
-
     parser.add_argument("-b", "--base", metavar="T/F", type=str, nargs=1, default=False,
                     help="include base or not [True/False]")
     parser.add_argument("-g", "--smooth", metavar="T/F", type=str, nargs=1, default=True,
                     help="smooth image or not [True/False]")
+    parser.add_argument("-c", "--negative", metavar="T/F", type=str, nargs=1, default=False,
+                    help="Generating a negative print instead or not(T/F)")
     parser.add_argument("-s", "--size", metavar="size", type=int, nargs=1, default=256,
                     help="size (length and width) of the STL mesh")
     parser.add_argument("-x", "--scale", metavar="scale", type=float, nargs=1, default=0.1,
@@ -138,12 +174,13 @@ def cli_interface():
 
     user_wants_base = arg_dictionary["base"] # result is in list form of one item
     user_wants_smooth = arg_dictionary["smooth"]
+    user_wants_negative = arg_dictionary["negative"]
     user_specified_size = arg_dictionary["size"]
     user_specified_scale = arg_dictionary["scale"]
     image_directory = arg_dictionary["image_directory"]
     stl_directory = arg_dictionary["stl_directory"]
 
-    # all parameter arguments are in the form of lists
+    # all parameter arguments are in the form of lists; otherwise, it means the command line option simply isn't invoked
     if isinstance(user_wants_base, list):
         if user_wants_base[0].lower() == 't' or user_wants_base[0].lower() == "true":
             include_base = True
@@ -168,16 +205,29 @@ def cli_interface():
         print("Using smooth default value: \'True\'...")
         include_smooth = True
 
+    if isinstance(user_wants_negative, list):
+        if user_wants_negative[0].lower() == 't' or user_wants_negative[0].lower() == "true":
+            generate_negative = True
+        elif user_wants_negative[0].lower() == 'f' or user_wants_negative[0].lower() == "false":
+            generate_negative = False
+        else:
+            print("Unknown parameter option; using negative default value: \'False\'...")
+            generate_negative = False
+    else:
+        print("Using negative default value: \'False\'...")
+        generate_negative = False
+
     try:
         size = user_specified_size[0]
         print("Size specified: " + str(size))
-    except Exception as e: # size is not specified as an argument
+    except Exception as errorMsg: # size is not specified as an argument
         print("default size: 256")
         size = 256
 
     try:
         scale = user_specified_scale[0]
-    except Exception as e: # scale is not specified as an argument
+    except Exception as errorMsg: # scale is not specified as an argument
+        print("default scale: 0.1")
         scale = 0.1
 
     if size <= 0:
@@ -190,7 +240,7 @@ def cli_interface():
         print("reverting back to default scale: 0.1")
         scale = 0.1
 
-    adinkra_interface(image_directory, stl_directory, include_base, include_smooth, size, scale)
+    convert_adinkra(image_directory, stl_directory, include_base, include_smooth, generate_negative, size, scale)
 
 
 def main():
