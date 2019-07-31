@@ -13,11 +13,13 @@ This script contains routines to convert images into STL files
 This script is not designed to be stand-alone; run the routine at adinkra_converter.py
 The STL mesh is simply a raised projection of the image itself
 
-If you experience any errors, feel free to contact me at jiruan@umich.edu
+If you experience any errors, feel free to contact me at 
+                                                    email: jiruan@umich.edu
+                                                    phone: +1-773-280-1417
 
 NOTE: This is written using Python 2.7. Python 2.7 will be going out of support starting Jan 1, 2020.
-TODO: rewrite this into Python 3.x
 """
+# TODO: rewrite this into Python 3.x
 
 
 def read_image(image_directory, read_mode=cv2.IMREAD_UNCHANGED):
@@ -45,13 +47,12 @@ def read_image(image_directory, read_mode=cv2.IMREAD_UNCHANGED):
 
     return image_matrix  # should be a 2d matrix of pixels
 
-
 def convert_to_standard_size(image_matrix, size=256):
     """
-    Resize the images and change the aspect ratio to 1:1.
+    Resize the image and change the aspect ratio to 1:1.
 
     :required_parameter image_matrix: (numpy.ndarray) A 2D array of pixels of the image to resize
-    :optional_parameter size: (int) The desired size of the output image
+    :optional_parameter size: (int) The desired size of the output image, in pixels
         The default parameter specifies an output image of 256 x 256
 
     :return: (numpy.ndarray) A 2D array of pixels representing the resized image
@@ -61,6 +62,91 @@ def convert_to_standard_size(image_matrix, size=256):
     resized_image_matrix = cv2.resize(image_matrix, dimensions)
 
     return resized_image_matrix
+
+
+def remove_white_borders(image_matrix):
+    """
+    Resize the image to only contain the shape by removing any white borders
+    The resulting image should be have the minimum size required to hold all the nonwhite pixels
+
+    :required_parameter image_matrix: (numpy.ndarray) An image, containing a white background and a shape
+    :return: (numpy.ndarray) An image with white borders removed
+    """
+
+    # TODO: maybe rewrite this so this image only need to turn into grayscale once
+    # threshold and contouring only plays nice with cv2.COLOR_BGR2GRAY grayscaling
+    cv2_grayscaled_image = cv2.cvtColor(image_matrix, cv2.COLOR_BGR2GRAY)
+
+    white_grayscale_pixel = 255
+    nonwhite_grayscale_threshold = 254
+
+    _, thresh = cv2.threshold(cv2_grayscaled_image, nonwhite_grayscale_threshold, white_grayscale_pixel,
+                              cv2.THRESH_BINARY_INV)
+    # create binary image where all white pixels become black, and where all nonwhite pixels become white
+
+    contour_list, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    # use external contour lines to find rough outermost shape that encapsulates the object
+
+    # the pixel matrix is indexed via (y, x)
+    # but the contour points are indexed(x, y)
+    extreme_left = image_matrix.shape[1] # y coordinate of leftmost point of shape
+    extreme_right = 0 # y coordinate of rightmost point of shape
+
+    extreme_top = image_matrix.shape[0] # x coordinate of topmost point of shape
+    extreme_bottom = 0 # x coordinate of bottom-most point of shape
+
+    # go through every point of each vertices of the outermost shape to find the extreme points
+    for contour in contour_list:
+        for points in contour:
+            point_coord = (points[0][0], points[0][1])
+
+            if point_coord[0] <= extreme_left:
+                extreme_left = point_coord[0]
+
+            if point_coord[0] >= extreme_right:
+                extreme_right = point_coord[0]
+
+            if point_coord[1] <= extreme_top:
+                extreme_top = point_coord[1]
+
+            if point_coord[1] >= extreme_bottom:
+                extreme_bottom = point_coord[1]
+
+    # assumes the extreme points can be used to build a square image that encapsulates the whole object
+    # also assumes the extreme points builds a square that doesn't index out of the image itself
+    return image_matrix[extreme_top:extreme_bottom, extreme_left:extreme_right]
+
+
+def add_back_white_border(image_matrix, border=100):
+    """
+    Add a border to all four sides of an image
+
+    :required_parameter image_matrix: (numpy.ndarray) An image without borders
+    :optional_parameter border: (int) the border to be added to all four sides of the image, in pixels
+                                        default border is 100 px
+    :return: (numpy.ndarray) An image with borders added
+    """
+
+    # dimensions are in (y, x)
+    image_dimensions = image_matrix.shape
+
+    # re-adjust new image dimensions to have borders
+    new_image_dimensions = list(image_dimensions)
+
+    new_image_dimensions[0] += 2 * border
+    new_image_dimensions[1] += 2 * border
+
+    new_image = np.full(new_image_dimensions, 255) # white background
+
+    # image offsets to place image with borders on all four sides
+    # image starts from 1 pixel past border for both x and y
+    image_offsets_y = (border + 1, border + image_dimensions[0] + 1)
+    image_offsets_x = (border + 1, border + image_dimensions[1] + 1)
+
+    # place image in center
+    new_image[image_offsets_y[0]:image_offsets_y[1], image_offsets_x[0]:image_offsets_x[1]] = image_matrix
+
+    return new_image
 
 
 def grayscale(image_matrix):
@@ -84,8 +170,11 @@ def grayscale(image_matrix):
     grayscaled_image = image_matrix.mean(axis=2)  # computes average of [r,g,b] to generate grayscale
 
     # theoretically can use cv2.IMREAD_GRAYSCALE to just switch to grayscale outright
-    # but doing so results in some weird data type incompatibility issue; so juse use the grayscale function
+    # but doing so results in some weird data type incompatibility issue; so just use this grayscale function
     # for now
+    #
+    # I could also maybe just use cv2.cvtColor to convert to grayscale
+    # but why fix it if it works.
 
     return grayscaled_image
 
@@ -129,7 +218,7 @@ def convert_transparent_to(image_matrix, target_pixel=[255,255,255]): # white pi
     Only works on [r, g, b, a] pixels
 
     :required_parameter image_matrix: (numpy.ndarray) a 2D array of pixels of the image to whiten
-    :optional_parameter target_pixel: (numpy.ndarray) a [r, g, b] pixel to replace transparent pixels with
+    :optional_parameter target_pixel: (numpy.ndarray) a [r, g, b] pixel to replace transparent pixels with.
         the default is a white pixel (#FFFFFF)
     :return: (numpy.ndarray) a 2D of pixels representing the whitened image
     """
@@ -137,11 +226,13 @@ def convert_transparent_to(image_matrix, target_pixel=[255,255,255]): # white pi
     whitened_image = image_matrix[:, :, 0:3]
     row_index = 0
 
+    # go through every pixel; turn all transparent pixel to white
+    # also remove the alpha channel
     for row in image_matrix:
         column_index = 0
 
         for pixel in row:
-            whitened_image[row_index][column_index] = transparent_to(pixel, pixel_replacement=target_pixel)
+            whitened_image[row_index][column_index] = transparent_to(pixel, target_pixel)
             column_index += 1
 
         row_index += 1
@@ -187,7 +278,7 @@ def convert_to_stl(image_matrix, output_file_directory, base=False, output_scale
 
     make_it_solid = True  # Change this False to make it hollow; True to make the image solid
     exclude_gray_shade_darker_than = 1.0  # Change this to change what colors should be excluded
-    # exclude_gray_shade_below = 1.0 should exclude only black pixels; but I'm not sure
+    # exclude_gray_shade_below = 1.0 should exclude only black pixels
 
     # this option controls whether or not stl_tools uses the c library
     # toggle this on if said c library causes issues
