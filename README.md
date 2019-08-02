@@ -1,4 +1,4 @@
-# Adinkra Extrusion Converter version 1.1
+# Adinkra Extrusion Converter version 1.2
 This project contains routines to convert an Adinkra symbol in jpeg/png format and converts it to an STL file for 3D printing.
 
 Make sure that the image background is either white (#FFFFFF) or transparent.
@@ -8,12 +8,13 @@ This can be used for any image, not just Adinkra symbols.
 # Release Note
     - version 1.0/2.7: Project is first pushed to production
     - version 1.1/2.7: Added an option to generate a negative mold as well as fixing issues with [r, g, b] channels
+    - version 1.2/2.7: Added a border option to remove and add a custom border to negative molds
 
 # Requirement
  - Python 2.7.16
  - Numpy 1.16
- - OpenCV-Python 4.1 (for reading and resizing images)
- - Scipy 1.2 (for scipy.ndimage.gaussian_filter)
+ - OpenCV-Python 4.1
+ - Scipy 1.2
  - stl_tools 0.3 (find at https://github.com/thearn/stl_tools)
 
 # Installation
@@ -32,11 +33,13 @@ image2stl.py contains the routines needed to convert images to STL, while adinkr
 adinkra_converter.py receives parameter options via the command line.
 
 Here is the template for invoking adinkra_converter.py:\
-`python adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False][-s/--size size] [-x/-scale scaling] image_directory stl_directory`
+`python adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False] [-p/--border width] [-s/--size size] [-x/-scale scaling] image_directory stl_directory`
 
 `-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).\
 `-g True` or `--smooth=True` specifies that the image is smoothed before converting to STL; False would disable this feature (default option).\
-`-c True` r `--negative=True` specifies that the image is used to generate a square with the image object as a  (default option is False). \
+`-c True` or `--negative=True` specifies that the image is used to generate a square with the image object as a  (default option is False). \
+`-p 100` or `--border=100` specifies that a border of 100px is generated on all four sides of the negative mold (default option). \
+                            \*\*NOTE: only used when `--negative=True` is specified \
 `-s 256` or `--size=256` specifies that the image be resized to (256x256) (default option).\
 `-x 0.1` or `--scale=0.1` scales the resulting STL mesh height to 1/10 (default option).
 
@@ -145,6 +148,27 @@ Resize the images and change the aspect ratio to 1:1.
     The default parameter specifies an output image of 256 x 256
 
 :return: (numpy.ndarray) A 2D array of pixels representing the resized image
+```
+
+
+**remove_white_borders(image_matrix)**
+```
+Resize the image to only contain the shape by removing any white borders
+The resulting image should be have the minimum size required to hold all the nonwhite pixels
+
+:required_parameter image_matrix: (numpy.ndarray) An image, containing a white background and a shape
+:return: (numpy.ndarray) An image with white borders removed
+```
+
+
+**add_white_border(image_matrix, border=100)**
+```
+Add a border to all four sides of an image
+
+:required_parameter image_matrix: (numpy.ndarray) An image without borders
+:optional_parameter border: (int) the border to be added to all four sides of the image, in pixels
+                                  default border is 100 px
+:return: (numpy.ndarray) An image with borders added
 ```
 
 
