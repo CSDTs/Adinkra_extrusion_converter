@@ -117,7 +117,7 @@ def remove_white_borders(image_matrix):
     return image_matrix[extreme_top:extreme_bottom, extreme_left:extreme_right]
 
 
-def add_back_white_border(image_matrix, border=100):
+def add_white_border(image_matrix, border=100):
     """
     Add a border to all four sides of an image
 

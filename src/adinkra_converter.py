@@ -1,17 +1,10 @@
+# project dependencies
 import image2stl
 
-try: # can your computer parse command line argument?
-    import argparse
-    import sys
-except ImportError as e:
-    print(e)
-    fallback_interface = True
-else:
-    fallback_interface = False
+# system dependencies
+import argparse
+import sys
 
-
-# uncomment this if you want to use the prompt based interface
-# fallback_interface = True
 
 def convert_adinkra(image_matrix,
                       output_stl_directory,
@@ -62,7 +55,7 @@ def convert_adinkra(image_matrix,
         borderless_image = image2stl.remove_white_borders(resized_image)
         # and the image is repositioned in the center with new borders added back in
         print("Re-adding border (size: " + str(border) + ") according to user specification...")
-        bordered_image = image2stl.add_back_white_border(borderless_image, border)
+        bordered_image = image2stl.add_white_border(borderless_image, border)
     else: # removing and re-adding borders on a positive model is useless
         bordered_image = resized_image
 
