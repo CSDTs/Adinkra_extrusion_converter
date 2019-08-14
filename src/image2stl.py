@@ -1,11 +1,3 @@
-import numpy as np
-import cv2 # Python bindings for OpenCV
-from scipy.ndimage import gaussian_filter
-
-# (APACHE License 2.0) STL file conversion library written by thearn
-# find it at https://github.com/thearn/stl_tools
-from stl_tools import numpy2stl
-
 """
 image2stl.py
 
@@ -13,13 +5,22 @@ This script contains routines to convert images into STL files
 This script is not designed to be stand-alone; run the routine at adinkra_converter.py
 The STL mesh is simply a raised projection of the image itself
 
-If you experience any errors, feel free to contact me at 
+If you experience any errors, feel free to contact me at
                                                     email: jiruan@umich.edu
                                                     phone: +1-773-280-1417
 
 NOTE: This is written using Python 2.7. Python 2.7 will be going out of support starting Jan 1, 2020.
 """
 # TODO: rewrite this into Python 3.x
+
+
+import numpy as np
+import cv2 # Python bindings for OpenCV
+from scipy.ndimage import gaussian_filter
+
+# (APACHE License 2.0) STL file conversion library written by thearn
+# find it at https://github.com/thearn/stl_tools
+import stl_tools
 
 
 def read_image(image_directory, read_mode=cv2.IMREAD_UNCHANGED):
@@ -46,6 +47,26 @@ def read_image(image_directory, read_mode=cv2.IMREAD_UNCHANGED):
         raise IOError(error_str)
 
     return image_matrix  # should be a 2d matrix of pixels
+
+
+def decode_image_stream(data_uri, read_mode=cv2.IMREAD_UNCHANGED):
+    """
+    Converts a data stream into a pixel matrix.
+
+    :required_parameter data_uri: (str) A string containing image data.
+    :optional_parameter read_mode: (constants from cv2) This constants controls
+        how to represent the pixels in the image. The constants include but is not limited to:
+            cv2.IMREAD_COLOR - represent pixels as an array designating [red, green, blue] channels
+            cv2.IMREAD_GRAYSCALE - represent pixels as intensity information
+                0.0 being completely black and 1.0 being completely white
+            cv2.IMREAD_UNCHANGED - represent pixels as an array designating [red, green, blue, alpha] channels
+    :return: (numpy.ndarray) A matrix of pixels.
+    """
+    image_binary = np.fromstring(data_uri, dtype=np.uint8)
+    image_matrix = cv2.imdecode(image_binary, read_mode)
+
+    return image_matrix
+
 
 def convert_to_standard_size(image_matrix, size=256):
     """
@@ -74,8 +95,12 @@ def remove_white_borders(image_matrix):
     """
 
     # TODO: maybe rewrite this so this image only need to turn into grayscale once
-    # threshold and contouring only plays nice with cv2.COLOR_BGR2GRAY grayscaling
-    cv2_grayscaled_image = cv2.cvtColor(image_matrix, cv2.COLOR_BGR2GRAY)
+    if len(image_matrix.shape) == 3:
+        # threshold and contouring only plays nice with cv2.COLOR_BGR2GRAY grayscaling
+        cv2_grayscaled_image = cv2.cvtColor(image_matrix, cv2.COLOR_BGR2GRAY)
+    else:
+        raise TypeError("Image pixels are not representable as [r, g, b] channels."
+                        " Check that the image is represented as a colored image.")
 
     white_grayscale_pixel = 255
     nonwhite_grayscale_threshold = 254
@@ -133,6 +158,7 @@ def add_white_border(image_matrix, border=100):
     # re-adjust new image dimensions to have borders
     new_image_dimensions = list(image_dimensions)
 
+    # resize dimensions to include the image dimensions plus border on both sides
     new_image_dimensions[0] += 2 * border
     new_image_dimensions[1] += 2 * border
 
@@ -160,6 +186,7 @@ def grayscale(image_matrix):
     """
 
     if len(image_matrix.shape) < 3:
+        print(image_matrix.shape)
         raise TypeError("Image pixels are not representable as an array of channels."
                         " Check that the image is represented as a colored image.")
     elif image_matrix.shape[2] == 4:
@@ -284,13 +311,15 @@ def convert_to_stl(image_matrix, output_file_directory, base=False, output_scale
     # toggle this on if said c library causes issues
     python_only = False
 
+    cv2.imwrite("../sample/images/test3.png", image_matrix)
+
     if base:
-        numpy2stl(image_matrix, output_file_directory,
+        stl_tools.numpy2stl(image_matrix, output_file_directory,
                 scale=output_scale,
                 solid=make_it_solid,
                 force_python=python_only)
     else:
-        numpy2stl(image_matrix, output_file_directory,
+        stl_tools.numpy2stl(image_matrix, output_file_directory,
                 scale=output_scale,
                 solid=make_it_solid,
                 mask_val=exclude_gray_shade_darker_than,
