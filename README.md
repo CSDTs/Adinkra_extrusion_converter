@@ -9,6 +9,7 @@ This can be used for any image, not just Adinkra symbols.
     - version 1.0/2.7: Project is first pushed to production
     - version 1.1/2.7: Added an option to generate a negative mold as well as fixing issues with [r, g, b] channels
     - version 1.2/2.7: Added a border option to remove and add a custom border to negative molds
+    - version 1.2.5/2.7: Contains the listener interface for integration with the online CSNAP application. Merge with master until the client side is completed and everything is still working as they should.
 
 # Requirement
  - Python 2.7.16
