@@ -2,7 +2,7 @@
 image2stl.py
 
 This script contains routines to convert images into STL files
-This script is not designed to be stand-alone; run the routine at adinkra_converter.py
+This script is not designed to be stand-alone; run the routine at Adinkra_converter.py
 The STL mesh is simply a raised projection of the image itself
 
 If you experience any errors, feel free to contact me at

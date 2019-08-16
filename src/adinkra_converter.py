@@ -1,5 +1,12 @@
 """
-TODO: file summary here
+This file contains routines to parse and compile data necessary for conversion of Adinkra designs to raised 3D
+projections in STL format.
+
+This file also contains the command line interface for Adinkra conversion.
+
+If you experience any errors, feel free to contact me at
+                                                    email: jiruan@umich.edu
+                                                    phone: +1-773-280-1417
 """
 
 # project dependencies
@@ -14,9 +21,6 @@ import base64
 
 
 """
-Python type conversion table
-find at https://docs.python.org/2/library/json.html#json-to-py-table
-
 JSON object -> dictionary
 JSON array -> list
 string -> unicode string
@@ -29,10 +33,10 @@ def text_to_json(text_data):
     """
     Converts json data in string format into their appropriate json format.
 
-    :param text_data: (str) A data string containing a data object in json-format.
+    :required_parameter text_data: (str) A data string containing a data object in json-format.
     :return: (json object) A json object containing the relevant data.
-
     """
+
     try:
         json_data = json.loads(text_data)
         # may have many types according to the json conversion table
@@ -63,7 +67,7 @@ def image_uri_parse(image_uri):
     """
     Parses the data uri scheme for data and parameter values.
 
-    :param image_uri: (str) A string containing a data uri scheme.
+    :required_parameter image_uri: (str) A string containing a data uri scheme.
     :return: (tuple) A tuple containing the parameter values and the data itself.
                     The tuple is arranged in (parameters, data) format.
                     The parameters are in list form, and the data is in string form.
@@ -119,7 +123,7 @@ def compile_adinkra_parameters(json_data):
     Parses the json data for adinkra conversion parameters.
     Fills in with default values if it's not present in the json data.
 
-    :param json_data: (dictionary) A dictionary containing data parsed from a json object.
+    :required_parameter json_data: (dictionary) A dictionary containing data parsed from a json object.
     :return: (tuple) A tuple containing necessary parameters for adinkra conversion.
         The tuple format is (image_matrix, output_stl_directory, include_base, smooth, negative, border, size, scale).
         These are arranged in the order of the input parameters for convert_adinkra().

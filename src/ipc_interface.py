@@ -1,11 +1,22 @@
 """
-This is a home-brew protocol to connect any services with Adinkra.
-
-(There may be an easier way for Python2 and Python3 programs to communicate with one another.
-I may try to find a better solution but this works for now.)
+This is a home-brew inter-process protocol to connect any services with Adinkra.
 
 You start by connecting to the host and port specified.
 You can then start sending data in json format after connecting to the listener.
+
+Every line must be terminated with \r\n.
+
+To begin transmission, simply send "BEGINTRANSMISSION".
+After that, send the necessary data.
+
+To send another transmission, separate the old transmission from the new one with "NEWTRANSMISSION"
+After that, just send "BEGINTRANSMISSION" again and do the same as above.
+
+To end the connection, send "ENDTRANSMISSION"
+
+If you experience any errors, feel free to contact me at
+                                                    email: jiruan@umich.edu
+                                                    phone: +1-773-280-1417
 """
 # TODO: find better, easier way to interface this with django
 
@@ -37,8 +48,6 @@ DEFAULT_MAX_QUEUED_CONNECTION = 5
 END_TRANSMISSION_SIGNAL = "ENDTRANSMISSION"  # clients: send this signal after you're done sending everything!
 BEGIN_TRANSMISSION_SIGNAL = "BEGINTRANSMISSION"  # clients: send this signal to begin transmission
 TRANSMISSION_SEPARATOR_SIGNAL = "NEWTRANSMISSION"  # clients: send this signal after sending a request to continue
-
-REQUEST_COMPLETE_SIGNAL = "REQUESTCOMPLETE\r\n" # clients: this notifies that the request is complete
 
 
 class IpcChannel:
@@ -135,7 +144,7 @@ class IpcChannel:
 		Keeps listening and give requests.
 		This is a generator, so it must be treated as an iterator that gives the next available data.
 
-		:return: (str) A data string containing adinkra request parameters and data in json-format.
+		:return: (tuple) A data string containing adinkra request parameters and data in json-format.
 		"""
 
 		keep_receiving_connection = True # might be used in the future; always True for infinite while loop for now

@@ -1,5 +1,9 @@
 """
-TODO: file summary
+This file contains functions to write log entries to log files.
+
+If you experience any errors, feel free to contact me at
+                                                    email: jiruan@umich.edu
+                                                    phone: +1-773-280-1417
 """
 
 
