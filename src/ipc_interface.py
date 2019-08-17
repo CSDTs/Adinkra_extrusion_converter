@@ -18,7 +18,7 @@ If you experience any errors, feel free to contact me at
                                                     email: jiruan@umich.edu
                                                     phone: +1-773-280-1417
 """
-# TODO: find better, easier way to interface this with django
+# TODO: find better, easier way to interface this with django, which should be written in Python3
 
 
 # project dependencies
@@ -46,9 +46,10 @@ DEFAULT_MAX_QUEUED_CONNECTION = 5
 
 # protocol specific signals
 END_TRANSMISSION_SIGNAL = "ENDTRANSMISSION"  # clients: send this signal after you're done sending everything!
-BEGIN_TRANSMISSION_SIGNAL = "BEGINTRANSMISSION"  # clients: send this signal to begin transmission
-TRANSMISSION_SEPARATOR_SIGNAL = "NEWTRANSMISSION"  # clients: send this signal after sending a request to continue
+BEGIN_TRANSMISSION_SIGNAL = "BEGINREQUEST"  # clients: send this signal to begin transmission
+TRANSMISSION_SEPARATOR_SIGNAL = "ENDREQUEST"  # clients: send this signal after sending a request to continue
 
+REQUEST_COMPLETE_SIGNAL = "REQUESTCOMPLETE" # server: send this signal to signify that a request is complete
 
 class IpcChannel:
 	"""
@@ -167,6 +168,11 @@ class IpcChannel:
 			while line_data != END_TRANSMISSION_SIGNAL:
 				data_bit = connection.recv(1) # grab data one byte at a time
 
+				"""
+				TODO: maybe capture exception when the client prematurely closes the connection, so a  single rogue
+				client doesn't trash the entire server listen loop
+				"""
+
 				if data_bit == "\r":
 					carriage_return_engaged = True
 				elif data_bit == "\n" and carriage_return_engaged: # \r\n delimiter detected
@@ -182,7 +188,7 @@ class IpcChannel:
 
 					line_data = ""
 					carriage_return_engaged = False
-				else: # allows either \r or \n in data, but not together
+				else: # allows either \r or \n in data, but treat them as delimiters if together
 					carriage_return_engaged = False
 					line_data += data_bit
 
@@ -196,17 +202,15 @@ class IpcChannel:
 
 
 	@staticmethod
-	def request_response(connection, stl_directory):
+	def request_response(connection, message):
 		"""
 		Send a response the connected client signifies that the adinkra request is complete
 
-		:param connection: (socket object) A socket containing the connection to the client.
-		:param stl_directory: (str) A string containing the directory to the resulting stl file.
+		:required_parameter connection: (socket object) A socket containing the connection to the client.
+		:required_parameter stl_directory: (str) A string containing the directory to the resulting stl file.
 		"""
-		stl_directory_string = "stl:" + stl_directory + "\r\n"
-
-		connection.send(REQUEST_COMPLETE_SIGNAL)
-		connection.send(stl_directory_string)
+		connection.send(REQUEST_COMPLETE_SIGNAL + "\r\n")
+		connection.send(message + "\r\n")
 
 
 	def cleanup(self):
