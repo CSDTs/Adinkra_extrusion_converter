@@ -31,6 +31,7 @@ Note: As of version 0.3.0, pip install stl_tools does not work with python 3.7. 
 
 ```bash
 cd $PROJECT
+pip install Cython
 git clone https://github.com/thearn/stl_tools.git
 find stl_tools -name '*.pyx' -exec cython {} \;
 cd stl_tools
