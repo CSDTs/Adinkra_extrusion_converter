@@ -43,11 +43,13 @@ image2stl.py contains the routines needed to convert images to STL, while adinkr
 adinkra_converter.py receives parameter options via the command line.
 
 Here is the template for invoking adinkra_converter.py:\
-`python adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False][-s/--size size] [-x/-scale scaling] image_directory stl_directory`
+`python adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False] [-p/--border width] [-s/--size size] [-x/-scale scaling] image_directory stl_directory`
 
 `-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).\
 `-g True` or `--smooth=True` specifies that the image is smoothed before converting to STL; False would disable this feature (default option).\
-`-c True` r `--negative=True` specifies that the image is used to generate a square with the image object as a  (default option is False). \
+`-c True` or `--negative=True` specifies that the image is used to generate a square with the image object as a  (default option is False). \
+`-p 100` or `--border=100` specifies that a border of 100px is generated on all four sides of the negative mold (default option). \
+                            \*\*NOTE: only used when `--negative=True` is specified \
 `-s 256` or `--size=256` specifies that the image be resized to (256x256) (default option).\
 `-x 0.1` or `--scale=0.1` scales the resulting STL mesh height to 1/10 (default option).
 
