@@ -10,7 +10,7 @@ This can be used for any image, not just Adinkra symbols.
     - version 1.1/2.7: Added an option to generate a negative mold as well as fixing issues with [r, g, b] channels
 
 # Requirement
- - Python 2.7.16
+ - Python 2.7.16 / 3.7.6
  - Numpy 1.16
  - OpenCV-Python 4.1 (for reading and resizing images)
  - Scipy 1.2 (for scipy.ndimage.gaussian_filter)
@@ -20,11 +20,21 @@ This can be used for any image, not just Adinkra symbols.
 Adinkra_converter can be used as is.
 
 The dependencies may be installed via pip with (This may vary based on your particular system)
-```
+```bash
 python -m pip install numpy
 python -m pip install opencv-python
 python -m pip install scipy
-python -m pip install stl_tools
+# python -m pip install stl_tools
+```
+Note: As of version 0.3.0, pip install stl_tools does not work with python 3.7. Please install as follows until it is fixed:
+
+
+```bash
+cd $PROJECT
+git clone https://github.com/thearn/stl_tools.git
+find stl_tools -name '*.pyx' -exec cython {} \;
+cd stl_tools
+pip install . --user
 ```
 
 # Usage Examples:
