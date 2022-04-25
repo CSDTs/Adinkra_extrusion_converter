@@ -1,4 +1,17 @@
-# Adinkra Extrusion Converter version 1.1
+# Adinkra Extrusion Converter version 3.0
+================================================================
+Requires csdt_stl_tools in order to function properly due to Python 3 updates.
+
+Additional documentation and setup for PyPi can be found [here](https://docs.google.com/document/d/1dkEE18c57dyifXEf-jxpAI8IP1ybXcsHqCkcuO1AexM/edit#heading=h.gvvoz8ixpl42).
+
+Note: You need to be added to our PyPi repository to make your have your changes reflected on the site.
+Also, make sure to remember to update requirements.txt in csdt_website to latest version of csdt_stl_converter. Finally, this README might be slightly outdated. If there are any discrepancies, please submit the changes that worked for you.
+
+Python 3.7.3
+
+
+================================================================
+
 This project contains routines to convert an Adinkra symbol in jpeg/png format and converts it to an STL file for 3D printing.
 
 Make sure that the image background is either white (#FFFFFF) or transparent.
@@ -8,23 +21,24 @@ This can be used for any image, not just Adinkra symbols.
 # Release Note
     - version 1.0/2.7: Project is first pushed to production
     - version 1.1/2.7: Added an option to generate a negative mold as well as fixing issues with [r, g, b] channels
+  - - version 3.0: Updated to Python3 and set up for PyPi package updates
 
-# Requirement
- - Python 2.7.16
- - Numpy 1.16
- - OpenCV-Python 4.1 (for reading and resizing images)
- - Scipy 1.2 (for scipy.ndimage.gaussian_filter)
- - stl_tools 0.3 (find at https://github.com/thearn/stl_tools)
+# Requirement 
+ - Python 3.7.3 (higher *should* be alright)
+ - Numpy 1.18.5
+ - OpenCV-Python 4.4.0.42 (for reading and resizing images)
+ - Scipy 1.5.2 (for scipy.ndimage.gaussian_filter)
+ - csdt_stl_tools 0.3.1 
 
 # Installation
 Adinkra_converter can be used as is.
 
-The dependencies may be installed via pip with (This may vary based on your particular system)
+The dependencies may be installed via pip with (This may vary based on your particular system and requirements reflected above)
 ```
 python -m pip install numpy
 python -m pip install opencv-python
 python -m pip install scipy
-python -m pip install stl_tools
+python -m pip install csdt_stl_tools
 ```
 
 # Usage Examples:
@@ -34,10 +48,10 @@ adinkra_converter.py receives parameter options via the command line.
 Here is the template for invoking adinkra_converter.py:\
 `python adinkra_converter.py [-b/--base True/False] [-g/--smooth True/False] [-c/--negative True/False][-s/--size size] [-x/-scale scaling] image_directory stl_directory`
 
-`-b True` or `--base=True` specifies that a base is added; False would indicate not adding a base (this is the default option).\
+`-b False` or `--base=False` specifies that a base is added; False would indicate not adding a base (this is the default option).\
 `-g True` or `--smooth=True` specifies that the image is smoothed before converting to STL; False would disable this feature (default option).\
-`-c True` r `--negative=True` specifies that the image is used to generate a square with the image object as a  (default option is False). \
-`-s 256` or `--size=256` specifies that the image be resized to (256x256) (default option).\
+`-c False` r `--negative=False` specifies that the image is used to generate a square with the image object as a  (default option is False). \
+`-s 480` or `--size=480` specifies that the image be resized to (480x480) (default option).\
 `-x 0.1` or `--scale=0.1` scales the resulting STL mesh height to 1/10 (default option).
 
 `image_directory` is the directory where the image to convert to STL resides.
