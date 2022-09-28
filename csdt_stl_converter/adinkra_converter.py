@@ -25,7 +25,7 @@ def convert_adinkra(input_image_directory,
                       include_base=False,
                       smooth=True,
                       negative=False,
-                      size=480,
+                      size=[480, 360],
                       scale=0.1):
     """
     Opens an adinkra image at input_image_directory, does image manipulation to prepare it for STL conversion,
@@ -57,7 +57,7 @@ def convert_adinkra(input_image_directory,
     else: # for whatever reason, image is only opened as [r, g, b] channels; no color corrections possible
         whitened_image_matrix = image_matrix
 
-    print("resizing to square the images to (" + str(size) + "x" + str(size) + ")...")
+    print("resizing to square the images to (" + str(size[0]) + "x" + str(size[1]) + ")...")
     resized_image = image2stl.convert_to_standard_size(whitened_image_matrix, size)
 
     print("converting the image to grayscale...")
@@ -93,7 +93,7 @@ def convert_adinkra(input_image_directory,
 
     stlData = image2stl.convert_to_stl(inverted_image, output_stl_directory, include_base, scale)
 
-    print("STL file generated and saved at " + output_stl_directory)
+    # print("STL file generated and saved at " + output_stl_directory)
 
     return (stlData)
 

@@ -47,7 +47,7 @@ def read_image(image_directory, read_mode=cv2.IMREAD_UNCHANGED):
     return image_matrix  # should be a 2d matrix of pixels
 
 
-def convert_to_standard_size(image_matrix, size=256):
+def convert_to_standard_size(image_matrix, size):
     """
     Resize the images and change the aspect ratio to 1:1.
 
@@ -58,7 +58,7 @@ def convert_to_standard_size(image_matrix, size=256):
     :return: (numpy.ndarray) A 2D array of pixels representing the resized image
     """
 
-    dimensions = (size, 360)
+    dimensions = (size[0], size[1])
     resized_image_matrix = cv2.resize(image_matrix, dimensions)
 
     return resized_image_matrix

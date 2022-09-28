@@ -10,7 +10,7 @@ SRC_DIR = "csdt_stl_converter"
 PACKAGES = [SRC_DIR]
 
 setup(name='csdt_stl_converter',
-      version='1.2.0',
+      version='1.2.1',
       install_requires=['csdt_stl_tools', 'opencv-python', 'numpy'],
       description="Converts images to stl files",
       long_description=readme(),
