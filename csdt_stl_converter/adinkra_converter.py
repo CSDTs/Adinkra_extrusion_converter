@@ -1,4 +1,4 @@
-from . import image2stl
+from test import image2stl
 
 try: # can your computer parse command line argument?
     import argparse
